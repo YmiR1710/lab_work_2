@@ -1,22 +1,23 @@
-import urllib.request, urllib.parse, urllib.error
-import twurl
-import json
-import ssl
+def twitter_api(acct):
+    import urllib.request, urllib.parse, urllib.error
+    import twurl
+    import json
+    import ssl
 
-# https://apps.twitter.com/
-# Create App and get the four strings, put them in hidden.py
+    # https://apps.twitter.com/
+    # Create App and get the four strings, put them in hidden.py
 
-TWITTER_URL = 'https://api.twitter.com/1.1/friends/list.json'
+    TWITTER_URL = 'https://api.twitter.com/1.1/friends/list.json'
 
-# Ignore SSL certificate errors
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
+    # Ignore SSL certificate errors
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
 
-while True:
+
     print('')
-    acct = input('Enter Twitter Account:')
-    if (len(acct) < 1): break
+    if (len(acct) < 1):
+        return None
     url = twurl.augment(TWITTER_URL,
                         {'screen_name': acct, 'count': '5'})
     print('Retrieving', url)
@@ -36,3 +37,4 @@ while True:
             continue
         s = u['status']['text']
         print('  ', s[:50])
+    return url

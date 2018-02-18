@@ -1,12 +1,15 @@
-def json_reader(path):
+def json_reader(url):
     """
     Function creates list with information from .json file
     (str) -> (list)
     """
     try:
         import json
-        with open(path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        import urllib3
+        import certifi
+        http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+        r = http.request('GET', url)
+        data = json.loads(r.data.decode("utf-8"))
         friends_list = list()
         friends_list_1 = list()
         for i in range(len(data["users"])):
@@ -42,4 +45,6 @@ def file_write(lst):
         return None
 
 
-file_write(json_reader("json.json"))
+import twitter2
+acc = input()
+file_write(json_reader(twitter2.twitter_api(acc)))
